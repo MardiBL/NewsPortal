@@ -1,5 +1,5 @@
-import HeroNews from '@/components/HeroNews'
-import LatestNews from '@/components/LatestNews'
+import HeroNews from '@/components/home/HeroNews'
+import LatestNews from '@/components/home/LatestNews'
 import Footer from '@/components/Footer'
 
 export default function HomePage() {

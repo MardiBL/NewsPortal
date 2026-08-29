@@ -2,12 +2,11 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
 import FeaturedNews from './FeaturedNews'
-import NewsList from './NewsList'
 import Newsletter from './Newsletter'
 import PopularCategories from './PopularCategories'
-import Agenda from './Agenda'
 import SocialMedia from './SocialMedia'
-
+import NewsList from './NewsList'
+import Agenda from './Agenda'
 export default function LatestNews() {
   return (
     <section className="mx-auto mt-16 max-w-7xl px-4 pb-16">
