@@ -1,50 +1,36 @@
 import { NextResponse } from 'next/server'
-import { getUsers, createUser } from '@/controllers/userController'
+import { prisma } from '@/lib/prisma'
 
 export async function GET() {
   try {
-    const users = await getUsers()
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
 
     return NextResponse.json({
       success: true,
       data: users,
     })
   } catch (error) {
-    console.error(error)
+    console.error('GET USERS ERROR:', error)
 
     return NextResponse.json(
       {
         success: false,
-        message: 'Gagal mengambil users',
+        message: 'Gagal mengambil data user',
+        error: error.message,
       },
       { status: 500 },
-    )
-  }
-}
-
-export async function POST(request) {
-  try {
-    const body = await request.json()
-
-    const user = await createUser(body)
-
-    return NextResponse.json(
-      {
-        success: true,
-        message: 'User berhasil dibuat',
-        data: user,
-      },
-      { status: 201 },
-    )
-  } catch (error) {
-    console.error(error)
-
-    return NextResponse.json(
-      {
-        success: false,
-        message: error.message,
-      },
-      { status: 400 },
     )
   }
 }
