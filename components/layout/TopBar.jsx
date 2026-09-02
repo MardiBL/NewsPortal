@@ -1,12 +1,18 @@
 import { Bell, Moon } from 'lucide-react'
 
 export default function TopBar() {
+  const today = new Intl.DateTimeFormat('id-ID', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date())
   return (
     <div className="bg-blue-700 text-white">
       <div className="mx-auto flex h-15 max-w-7xl items-center justify-between px-4">
         {/* LEFT */}
         <div className="flex items-center gap-6 text-sm font-medium md:text-base">
-          <span>Sabtu, 27 September 2025</span>
+          <span>{today}</span>
 
           <div className="hidden items-center gap-2 sm:flex">
             <Bell className="h-4 w-4" />

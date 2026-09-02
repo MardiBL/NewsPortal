@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Menu, Search, X } from 'lucide-react'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 const menus = [
   {
@@ -11,41 +12,41 @@ const menus = [
   },
   {
     name: 'Nasional',
-    href: '/berita/nasional',
+    href: '/nasional',
   },
   {
     name: 'Daerah',
-    href: '/berita/daerah',
+    href: '/daerah',
   },
   {
     name: 'Politik',
-    href: '/berita/politik',
+    href: '/politik',
   },
   {
     name: 'Ekonomi',
-    href: '/berita/ekonomi',
+    href: '/ekonomi',
   },
   {
     name: 'Lifestyle',
-    href: '/berita/lifestyle',
+    href: '/lifestyle',
   },
   {
     name: 'Olahraga',
-    href: '/berita/olahraga',
+    href: '/olahraga',
   },
   {
     name: 'Teknologi',
-    href: '/berita/teknologi',
+    href: '/teknologi',
   },
   {
     name: 'Opini',
-    href: '/berita/opini',
+    href: '/opini',
   },
 ]
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
-
+  const pathname = usePathname()
   return (
     <header className="border-b border-slate-200 bg-white  shadow-sm">
       <div className="mx-auto max-w-7xl px-4">
@@ -65,16 +66,24 @@ export default function Navbar() {
           </div>
 
           {/* DESKTOP MENU */}
-          <nav className="hidden items-center gap-6 lg:flex">
-            {menus.map((menu) => (
-              <Link
-                key={menu.name}
-                href={menu.href}
-                className="whitespace-nowrap text-[16px] font-medium text-slate-700 transition hover:text-blue-700"
-              >
-                {menu.name}
-              </Link>
-            ))}
+          <nav className="hidden items-center gap-2 lg:flex">
+            {menus.map((menu) => {
+              const isActive = pathname === menu.href
+
+              return (
+                <Link
+                  key={menu.name}
+                  href={menu.href}
+                  className={`whitespace-nowrap rounded-lg px-2 py-1.5 text-[16px] font-medium transition ${
+                    isActive
+                      ? 'bg-blue-700 text-white'
+                      : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700'
+                  }`}
+                >
+                  {menu.name}
+                </Link>
+              )
+            })}
           </nav>
 
           {/* SEARCH */}
@@ -98,18 +107,26 @@ export default function Navbar() {
         {/* MOBILE MENU */}
         {open && (
           <nav className="border-t border-slate-200 py-3 lg:hidden">
-            {menus.map((menu) => (
-              <Link
-                key={menu.name}
-                href={menu.href}
-                onClick={() => setOpen(false)}
-                className="block border-b border-slate-100 py-3 text-slate-700 transition hover:text-blue-700"
-              >
-                {menu.name}
-              </Link>
-            ))}
+            {menus.map((menu) => {
+              const isActive = pathname === menu.href
 
-            <button className="mt-3 flex items-center gap-2 py-2 text-slate-700">
+              return (
+                <Link
+                  key={menu.name}
+                  href={menu.href}
+                  onClick={() => setOpen(false)}
+                  className={`block border-b border-slate-100 px-4 py-3 text-[16px] font-medium transition ${
+                    isActive
+                      ? 'bg-blue-700 text-white'
+                      : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700'
+                  }`}
+                >
+                  {menu.name}
+                </Link>
+              )
+            })}
+
+            <button className="mt-3 flex items-center gap-2 px-4 py-2 text-slate-700">
               <Search className="h-5 w-5" />
               Cari berita
             </button>
