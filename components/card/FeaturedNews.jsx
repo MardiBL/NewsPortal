@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Share2, UserRound, Clock3, Eye } from 'lucide-react'
 
-export default function FeaturedNews({ layout = 'horizontal', news }) {
+export default function FeaturedNews({ layout = 'horizontal' }) {
   const defaultNews = {
     title: 'DPR Setujui RUU Omnibus Law Cipta Kerja dalam Sidang Paripurna',
     slug: 'dpr-setujui-ruu-omnibus-law-cipta-kerja',
@@ -17,7 +17,7 @@ export default function FeaturedNews({ layout = 'horizontal', news }) {
     views: '15.2k',
   }
 
-  const data = news || defaultNews
+  const data = defaultNews
 
   const detailUrl = `/berita/${data.category}/${data.slug}`
 

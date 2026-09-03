@@ -40,7 +40,7 @@ export default function HomePage() {
             </div>
 
             {/* BERITA UTAMA */}
-            <FeaturedNews layout="horizontal" news={newsData} />
+            <FeaturedNews layout="horizontal" />
 
             {/* BERITA LAIN */}
             <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
