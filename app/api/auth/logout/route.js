@@ -11,7 +11,9 @@ export async function POST() {
       name: 'token',
       value: '',
       httpOnly: true,
-      expires: new Date(0),
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 0,
       path: '/',
     })
 
@@ -22,7 +24,7 @@ export async function POST() {
     return NextResponse.json(
       {
         success: false,
-        message: 'Terjadi kesalahan server',
+        message: 'Terjadi kesalahan saat logout',
       },
       { status: 500 },
     )

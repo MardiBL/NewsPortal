@@ -6,13 +6,15 @@ export async function POST(request) {
   try {
     const body = await request.json()
 
-    const { name, email, password } = body
+    const name = body.name?.trim()
+    const email = body.email?.trim().toLowerCase()
+    const password = body.password
 
     if (!name || !email || !password) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Name, email, dan password wajib diisi',
+          message: 'Nama, email, dan password wajib diisi',
         },
         { status: 400 },
       )
@@ -28,11 +30,9 @@ export async function POST(request) {
       )
     }
 
-    const normalizedEmail = email.toLowerCase().trim()
-
     const existingUser = await prisma.user.findUnique({
       where: {
-        email: normalizedEmail,
+        email,
       },
     })
 
@@ -42,7 +42,7 @@ export async function POST(request) {
           success: false,
           message: 'Email sudah terdaftar',
         },
-        { status: 400 },
+        { status: 409 },
       )
     }
 
@@ -50,23 +50,28 @@ export async function POST(request) {
 
     const user = await prisma.user.create({
       data: {
-        name: name.trim(),
-        email: normalizedEmail,
+        name,
+        email,
         password: hashedPassword,
+        role: 'USER',
+        isActive: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
       },
     })
 
     return NextResponse.json(
       {
         success: true,
-        message: 'Register berhasil',
-        data: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          createdAt: user.createdAt,
-        },
+        message: 'Registrasi berhasil',
+        data: user,
       },
       { status: 201 },
     )
@@ -76,7 +81,7 @@ export async function POST(request) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Terjadi kesalahan server',
+        message: 'Terjadi kesalahan saat registrasi',
       },
       { status: 500 },
     )

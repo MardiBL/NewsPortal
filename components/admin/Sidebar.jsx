@@ -6,198 +6,233 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard,
   Newspaper,
+  Folder,
+  CalendarDays,
+  Megaphone,
+  Star,
   MessageSquare,
-  Image,
-  Monitor,
   Users,
+  Images,
+  Image,
   Settings,
   LogOut,
-  ChevronDown,
-  Tag,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react'
-import { useState } from 'react'
 
 const menu = [
   {
-    title: 'Dashboard',
-    href: '/admin/dashboard',
+    name: 'Dashboard',
+    href: '/dashboard-admin/dashboard',
     icon: LayoutDashboard,
   },
   {
-    title: 'Berita',
+    name: 'Berita',
+    href: '/dashboard-admin/berita',
     icon: Newspaper,
-    children: [
-      {
-        title: 'Daftar Berita',
-        href: '/admin/berita',
-      },
-      {
-        title: 'Tambah Berita',
-        href: '/admin/berita/tambah',
-      },
-      {
-        title: 'Kategori',
-        href: '/admin/berita/kategori',
-      },
-      {
-        title: 'Tag',
-        href: '/admin/berita/tag',
-      },
-    ],
+    dot: true,
   },
   {
-    title: 'Komentar',
-    href: '/admin/komentar',
+    name: 'Kategori',
+    href: '/dashboard-admin/kategori',
+    icon: Folder,
+  },
+  {
+    name: 'Agenda',
+    href: '/dashboard-admin/agenda',
+    icon: CalendarDays,
+  },
+  {
+    name: 'Breaking News',
+    href: '/dashboard-admin/breaking-news',
+    icon: Megaphone,
+  },
+  {
+    name: 'Berita Utama',
+    href: '/dashboard-admin/featured',
+    icon: Star,
+  },
+  {
+    name: 'Komentar',
+    href: '/dashboard-admin/komentar',
     icon: MessageSquare,
   },
   {
-    title: 'Media',
-    href: '/admin/media',
-    icon: Image,
-  },
-  {
-    title: 'Banner',
-    href: '/admin/banner',
-    icon: Monitor,
-  },
-  {
-    title: 'Pengguna',
-    href: '/admin/pengguna',
+    name: 'Pengguna',
+    href: '/dashboard-admin/pengguna',
     icon: Users,
   },
   {
-    title: 'Pengaturan',
-    href: '/admin/pengaturan',
+    name: 'Media',
+    href: '/dashboard-admin/media',
+    icon: Images,
+  },
+  {
+    name: 'Banner',
+    href: '/dashboard-admin/banner',
+    icon: Image,
+  },
+  {
+    name: 'Pengaturan',
+    href: '/dashboard-admin/pengaturan',
     icon: Settings,
   },
 ]
 
-export default function Sidebar() {
+export default function Sidebar({ collapsed, setCollapsed }) {
   const pathname = usePathname()
 
-  const [openMenu, setOpenMenu] = useState(
-    pathname.startsWith('/admin/berita') ? 'Berita' : null,
-  )
-  const beritaActive = pathname.startsWith('/admin/berita')
+  const isActive = (href) => {
+    return pathname === href
+  }
 
   return (
-    <aside className="fixed left-0 top-0 z-50 flex h-screen w-60 flex-col bg-slate-950 text-white">
-      {/* LOGO */}
-      <div className="border-b border-slate-800 px-6 py-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-blue-600">
-            <Newspaper className="h-6 w-6" />
+    <>
+      {/* SIDEBAR */}
+      <aside
+        className={`
+          fixed
+          left-0
+          top-0
+          z-50
+          flex
+          h-screen
+          flex-col
+          overflow-hidden
+          bg-[#071a2b]
+          text-white
+          shadow-xl
+          transition-all
+          duration-300
+          ease-in-out
+          ${collapsed ? 'w-0' : 'w-[260px]'}
+        `}
+      >
+        <div className="flex min-w-[260px] h-full flex-col">
+          {/* ================= LOGO ================= */}
+          <div className="px-6 pt-6 pb-5">
+            <Link
+              href="/dashboard-admin/dashboard"
+              className="flex items-center gap-3"
+            >
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600">
+                <span className="text-lg font-bold">N</span>
+              </div>
+
+              <span className="text-[20px] font-bold tracking-tight">
+                NewsPortal
+              </span>
+            </Link>
           </div>
 
-          <div>
-            <h1 className="text-xl font-bold text-blue-500">NewsPortal</h1>
+          {/* ================= MENU ================= */}
+          <nav className="flex-1 overflow-y-auto px-3 py-5">
+            <div className="space-y-1">
+              {menu.map((item) => {
+                const Icon = item.icon
+                const active = isActive(item.href)
 
-            <p className="text-xs text-slate-400">Admin Dashboard</p>
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`
+                      flex
+                      items-center
+                      gap-3
+                      rounded-lg
+                      px-4
+                      py-[11px]
+                      text-sm
+                      font-medium
+                      transition-all
+                      duration-200
+                      ${
+                        active
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                      }
+                    `}
+                  >
+                    {/* ICON */}
+                    <Icon size={19} strokeWidth={2} className="shrink-0" />
+
+                    {/* TEXT */}
+                    <span className="flex-1">{item.name}</span>
+
+                    {/* DOT - seperti gambar */}
+                    {item.dot && (
+                      <span
+                        className={`
+                          h-1.5
+                          w-1.5
+                          rounded-full
+                          ${active ? 'bg-white' : 'bg-slate-500'}
+                        `}
+                      />
+                    )}
+                  </Link>
+                )
+              })}
+            </div>
+          </nav>
+
+          {/* ================= KELUAR ================= */}
+          <div className="border-t border-white/10 p-4">
+            <button
+              type="button"
+              className="
+                flex
+                w-full
+                items-center
+                gap-3
+                rounded-lg
+                px-4
+                py-[11px]
+                text-sm
+                font-medium
+                text-slate-300
+                transition
+                hover:bg-red-500/10
+                hover:text-red-400
+              "
+            >
+              <LogOut size={19} strokeWidth={2} />
+
+              <span>Keluar</span>
+            </button>
           </div>
         </div>
-      </div>
+      </aside>
 
-      {/* MENU */}
-      <div className="flex-1 overflow-y-auto px-3 py-6">
-        <p className="mb-4 px-3 text-xs font-medium uppercase text-slate-500">
-          Menu Utama
-        </p>
-
-        <nav className="space-y-1">
-          {menu.map((item) => {
-            const Icon = item.icon
-
-            // =========================
-            // MENU DENGAN SUB MENU
-            // =========================
-            if (item.children) {
-              const isOpen = openMenu === item.title
-              const isActive = item.children.some(
-                (child) => pathname === child.href,
-              )
-
-              return (
-                <div key={item.title}>
-                  <button
-                    type="button"
-                    onClick={() => setOpenMenu(isOpen ? null : item.title)}
-                    className={`flex w-full items-center justify-between rounded-lg px-3 py-3 transition ${
-                      isActive || isOpen
-                        ? 'bg-blue-600 text-white'
-                        : 'text-slate-300 hover:bg-slate-800'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <Icon className="h-5 w-5" />
-
-                      <span className="font-medium">{item.title}</span>
-                    </div>
-
-                    <ChevronDown
-                      className={`h-4 w-4 transition-transform duration-200 ${
-                        isOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-
-                  {/* SUB MENU */}
-                  {isOpen && (
-                    <div className="ml-8 mt-1 space-y-1">
-                      {item.children.map((child) => {
-                        const active = pathname === child.href
-
-                        return (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            className={`block rounded-lg px-3 py-2.5 text-sm transition ${
-                              active
-                                ? 'text-blue-400'
-                                : 'text-slate-400 hover:text-white'
-                            }`}
-                          >
-                            {child.title}
-                          </Link>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              )
-            }
-
-            // =========================
-            // MENU BIASA
-            // =========================
-            const active = pathname === item.href
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 rounded-lg px-3 py-3 transition ${
-                  active
-                    ? 'bg-blue-600 text-white'
-                    : 'text-slate-300 hover:bg-slate-800'
-                }`}
-              >
-                <Icon className="h-5 w-5" />
-
-                <span className="font-medium">{item.title}</span>
-              </Link>
-            )
-          })}
-        </nav>
-      </div>
-
-      {/* LOGOUT */}
-      <div className="border-t border-slate-800 p-4">
-        <button className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-slate-300 hover:bg-slate-800 hover:text-white">
-          <LogOut className="h-5 w-5" />
-
-          <span>Keluar</span>
-        </button>
-      </div>
-    </aside>
+      {/* ================= COLLAPSE BUTTON ================= */}
+      <button
+        type="button"
+        onClick={() => setCollapsed(!collapsed)}
+        aria-label={collapsed ? 'Buka sidebar' : 'Tutup sidebar'}
+        className={`
+          fixed
+          top-5
+          z-[60]
+          flex
+          h-9
+          w-9
+          items-center
+          justify-center
+          rounded-full
+          border
+          border-slate-200
+          bg-white
+          text-slate-700
+          shadow-md
+          transition-all
+          duration-300
+          hover:bg-slate-100
+          ${collapsed ? 'left-4' : 'left-[240px]'}
+        `}
+      >
+        {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+      </button>
+    </>
   )
 }

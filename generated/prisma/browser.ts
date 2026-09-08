@@ -32,3 +32,43 @@ export type Category = Prisma.CategoryModel
  * 
  */
 export type News = Prisma.NewsModel
+/**
+ * Model NewsLike
+ * 
+ */
+export type NewsLike = Prisma.NewsLikeModel
+/**
+ * Model Comment
+ * 
+ */
+export type Comment = Prisma.CommentModel
+/**
+ * Model FeaturedNews
+ * 
+ */
+export type FeaturedNews = Prisma.FeaturedNewsModel
+/**
+ * Model BreakingNews
+ * 
+ */
+export type BreakingNews = Prisma.BreakingNewsModel
+/**
+ * Model Agenda
+ * 
+ */
+export type Agenda = Prisma.AgendaModel
+/**
+ * Model Media
+ * 
+ */
+export type Media = Prisma.MediaModel
+/**
+ * Model Banner
+ * 
+ */
+export type Banner = Prisma.BannerModel
+/**
+ * Model Setting
+ * 
+ */
+export type Setting = Prisma.SettingModel

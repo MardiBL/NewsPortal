@@ -7,7 +7,8 @@ export async function POST(request) {
   try {
     const body = await request.json()
 
-    const { email, password } = body
+    const email = body.email?.trim().toLowerCase()
+    const password = body.password
 
     if (!email || !password) {
       return NextResponse.json(
@@ -19,15 +20,9 @@ export async function POST(request) {
       )
     }
 
-    if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET belum dikonfigurasi')
-    }
-
-    const normalizedEmail = email.toLowerCase().trim()
-
     const user = await prisma.user.findUnique({
       where: {
-        email: normalizedEmail,
+        email,
       },
     })
 
@@ -41,9 +36,19 @@ export async function POST(request) {
       )
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password)
+    if (!user.isActive) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Akun Anda tidak aktif',
+        },
+        { status: 403 },
+      )
+    }
 
-    if (!passwordMatch) {
+    const passwordValid = await bcrypt.compare(password, user.password)
+
+    if (!passwordValid) {
       return NextResponse.json(
         {
           success: false,
@@ -53,28 +58,46 @@ export async function POST(request) {
       )
     }
 
+    const jwtSecret = process.env.JWT_SECRET
+
+    if (!jwtSecret) {
+      console.error('JWT_SECRET belum diset')
+
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Konfigurasi server belum lengkap',
+        },
+        { status: 500 },
+      )
+    }
+
     const token = jwt.sign(
       {
         id: user.id,
         email: user.email,
         role: user.role,
       },
-      process.env.JWT_SECRET,
+      jwtSecret,
       {
-        expiresIn: '1d',
+        expiresIn: '7d',
       },
     )
 
-    const response = NextResponse.json({
-      success: true,
-      message: 'Login berhasil',
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
+    const response = NextResponse.json(
+      {
+        success: true,
+        message: 'Login berhasil',
+        data: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          isActive: user.isActive,
+        },
       },
-    })
+      { status: 200 },
+    )
 
     response.cookies.set({
       name: 'token',
@@ -82,7 +105,7 @@ export async function POST(request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24,
+      maxAge: 60 * 60 * 24 * 7,
       path: '/',
     })
 
@@ -93,7 +116,7 @@ export async function POST(request) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Terjadi kesalahan server',
+        message: 'Terjadi kesalahan saat login',
       },
       { status: 500 },
     )

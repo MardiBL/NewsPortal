@@ -53,7 +53,15 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Category: 'Category',
-  News: 'News'
+  News: 'News',
+  NewsLike: 'NewsLike',
+  Comment: 'Comment',
+  FeaturedNews: 'FeaturedNews',
+  BreakingNews: 'BreakingNews',
+  Agenda: 'Agenda',
+  Media: 'Media',
+  Banner: 'Banner',
+  Setting: 'Setting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -78,6 +86,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   role: 'role',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -89,6 +98,7 @@ export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
   slug: 'slug',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -100,17 +110,130 @@ export const NewsScalarFieldEnum = {
   id: 'id',
   title: 'title',
   slug: 'slug',
-  description: 'description',
+  excerpt: 'excerpt',
   content: 'content',
   image: 'image',
+  status: 'status',
   views: 'views',
   authorId: 'authorId',
   categoryId: 'categoryId',
+  publishedAt: 'publishedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type NewsScalarFieldEnum = (typeof NewsScalarFieldEnum)[keyof typeof NewsScalarFieldEnum]
+
+
+export const NewsLikeScalarFieldEnum = {
+  id: 'id',
+  newsId: 'newsId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type NewsLikeScalarFieldEnum = (typeof NewsLikeScalarFieldEnum)[keyof typeof NewsLikeScalarFieldEnum]
+
+
+export const CommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  newsId: 'newsId',
+  userId: 'userId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
+
+
+export const FeaturedNewsScalarFieldEnum = {
+  id: 'id',
+  newsId: 'newsId',
+  position: 'position',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeaturedNewsScalarFieldEnum = (typeof FeaturedNewsScalarFieldEnum)[keyof typeof FeaturedNewsScalarFieldEnum]
+
+
+export const BreakingNewsScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  status: 'status',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BreakingNewsScalarFieldEnum = (typeof BreakingNewsScalarFieldEnum)[keyof typeof BreakingNewsScalarFieldEnum]
+
+
+export const AgendaScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  description: 'description',
+  image: 'image',
+  location: 'location',
+  eventDate: 'eventDate',
+  status: 'status',
+  link: 'link',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AgendaScalarFieldEnum = (typeof AgendaScalarFieldEnum)[keyof typeof AgendaScalarFieldEnum]
+
+
+export const MediaScalarFieldEnum = {
+  id: 'id',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
+  alt: 'alt',
+  caption: 'caption',
+  type: 'type',
+  uploadedById: 'uploadedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
+
+
+export const BannerScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  image: 'image',
+  link: 'link',
+  position: 'position',
+  status: 'status',
+  startAt: 'startAt',
+  endAt: 'endAt',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BannerScalarFieldEnum = (typeof BannerScalarFieldEnum)[keyof typeof BannerScalarFieldEnum]
+
+
+export const SettingScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -150,10 +273,72 @@ export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 export const NewsOrderByRelevanceFieldEnum = {
   title: 'title',
   slug: 'slug',
-  description: 'description',
+  excerpt: 'excerpt',
   content: 'content',
-  image: 'image'
+  image: 'image',
+  status: 'status'
 } as const
 
 export type NewsOrderByRelevanceFieldEnum = (typeof NewsOrderByRelevanceFieldEnum)[keyof typeof NewsOrderByRelevanceFieldEnum]
+
+
+export const CommentOrderByRelevanceFieldEnum = {
+  content: 'content',
+  status: 'status'
+} as const
+
+export type CommentOrderByRelevanceFieldEnum = (typeof CommentOrderByRelevanceFieldEnum)[keyof typeof CommentOrderByRelevanceFieldEnum]
+
+
+export const BreakingNewsOrderByRelevanceFieldEnum = {
+  title: 'title',
+  slug: 'slug',
+  status: 'status'
+} as const
+
+export type BreakingNewsOrderByRelevanceFieldEnum = (typeof BreakingNewsOrderByRelevanceFieldEnum)[keyof typeof BreakingNewsOrderByRelevanceFieldEnum]
+
+
+export const AgendaOrderByRelevanceFieldEnum = {
+  title: 'title',
+  slug: 'slug',
+  description: 'description',
+  image: 'image',
+  location: 'location',
+  status: 'status',
+  link: 'link'
+} as const
+
+export type AgendaOrderByRelevanceFieldEnum = (typeof AgendaOrderByRelevanceFieldEnum)[keyof typeof AgendaOrderByRelevanceFieldEnum]
+
+
+export const MediaOrderByRelevanceFieldEnum = {
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  mimeType: 'mimeType',
+  alt: 'alt',
+  caption: 'caption',
+  type: 'type'
+} as const
+
+export type MediaOrderByRelevanceFieldEnum = (typeof MediaOrderByRelevanceFieldEnum)[keyof typeof MediaOrderByRelevanceFieldEnum]
+
+
+export const BannerOrderByRelevanceFieldEnum = {
+  title: 'title',
+  image: 'image',
+  link: 'link',
+  position: 'position',
+  status: 'status'
+} as const
+
+export type BannerOrderByRelevanceFieldEnum = (typeof BannerOrderByRelevanceFieldEnum)[keyof typeof BannerOrderByRelevanceFieldEnum]
+
+
+export const SettingOrderByRelevanceFieldEnum = {
+  key: 'key',
+  value: 'value'
+} as const
+
+export type SettingOrderByRelevanceFieldEnum = (typeof SettingOrderByRelevanceFieldEnum)[keyof typeof SettingOrderByRelevanceFieldEnum]
 
